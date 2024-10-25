@@ -1,0 +1,120 @@
+<!-- templates/services.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .video-container {
+            margin: 20px auto;
+            max-width: 800px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #000;
+        }
+        
+        #video_feed {
+            width: 100%;
+            height: auto;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        #startBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #stopBtn {
+            background-color: #f44336;
+            color: white;
+        }
+        #chatbot{
+            background-color: #1014d4;
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.8;
+        }
+        
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Language Detection chatbot</h1>
+        
+        <div class="video-container">
+            <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" onclick="startDetection()">Start Detection</button>
+            <button id="stopBtn" onclick="stopDetection()">Stop Detection</button>
+            <button id="chatbot" onclick="redirectToStreamlit()">ChatBot</button>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        function startDetection() {
+            fetch('/start')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('status').textContent = data;
+                    document.getElementById('video_feed').src = "{{ url_for('video_feed') }}";
+                });
+        }
+        
+        function stopDetection() {
+            fetch('/stop')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('status').textContent = data;
+                    document.getElementById('video_feed').src = "";
+                });
+        }
+        function redirectToStreamlit() {
+            window.location.href = "http://localhost:8501/";
+        }
+    </script>
+</body>
+</html>
